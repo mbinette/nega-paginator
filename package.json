@@ -1,0 +1,18 @@
+{
+  "name": "nega-paginator",
+  "version": "0.0.0",
+  "description": "A Polymer paginator.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennethklee/nega-paginator.git"
+  },
+  "author": "Kenneth Lee <kennethkl@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/kennethklee/nega-paginator/issues"
+  },
+  "homepage": "https://github.com/kennethklee/nega-paginator#readme"
+}
