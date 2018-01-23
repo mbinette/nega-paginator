@@ -22,7 +22,8 @@
       <h3>Basic nega-paginator demo</h3>
       <demo-snippet>
         <template>
-          <nega-paginator></nega-paginator>
+          Current page is {{page}}.
+          <nega-paginator page="{{page}}" pageSize="{{pageSize}}" total="100"></nega-paginator>
         </template>
       </demo-snippet>
     </div>
