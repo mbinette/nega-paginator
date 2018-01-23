@@ -4,16 +4,6 @@
 
 Example:
 
-## &lt;paper-button&gt;
-
-Material design: [Buttons](https://www.google.com/design/spec/components/buttons.html)
-
-`paper-button` is a button. When the user touches the button, a ripple effect emanates
-from the point of contact. It may be flat or raised. A raised button is styled with a
-shadow.
-
-Example:
-
 <!---
 ```
 <custom-element-demo>
