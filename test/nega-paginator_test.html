@@ -12,41 +12,147 @@
     <link rel="import" href="../nega-paginator.html">
   </head>
   <body>
-
     <test-fixture id="BasicTestFixture">
       <template>
         <nega-paginator></nega-paginator>
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
+    <test-fixture id="TotalTestFixture">
       <template>
-        <nega-paginator prop1="new-prop1"></nega-paginator>
+        <nega-paginator total="100"></nega-paginator>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="SmallTestFixture">
+      <template>
+        <nega-paginator page="2" page-size="10" total="20"></nega-paginator>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="OutOfRangeTestFixture">
+      <template>
+        <nega-paginator page="5" page-size="10" total="10"></nega-paginator>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="InvalidTestFixture">
+      <template>
+        <nega-paginator page="foobar"></nega-paginator>
       </template>
     </test-fixture>
 
     <script>
       suite('nega-paginator', () => {
-
         test('instantiating the element with default properties works', () => {
           const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'nega-paginator');
+          assert.equal(element.page, 1);
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello nega-paginator!');
+
+          // Default properties does not show numbers
+          const buttonElementList = elementShadowRoot.querySelectorAll('paper-button');
+          const buttonElementDisabledList = elementShadowRoot.querySelectorAll('paper-button[disabled]');
+          const buttonElementHiddenList = elementShadowRoot.querySelectorAll('paper-button[hidden]');
+          
+          assert.equal(buttonElementList.length, 7);
+          assert.equal(buttonElementDisabledList.length, 2);
+          assert.equal(buttonElementHiddenList.length, 3);
         });
 
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
+        test('paginating default element properly disables first and last buttons', () => {
+          const element = fixture('BasicTestFixture');
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+          // First and last should be disabled
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 2);
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[0].icon, 'icons:first-page');
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[1].icon, 'icons:last-page');
+
+          // Last should continue to be disabled
+          element.nextPage();
+          assert.equal(element.page, 2);
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 1);
+          assert.equal(elementShadowRoot.querySelector('paper-button[disabled] iron-icon').icon, 'icons:last-page');
+
+          element.nextPage();
+          element.nextPage();
+          element.nextPage();
+          assert.equal(element.page, 5);
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 1);
+          assert.equal(elementShadowRoot.querySelector('paper-button[disabled] iron-icon').icon, 'icons:last-page');
+
+          // First and last should again be disabled
+          element.firstPage();
+          assert.equal(element.page, 1);
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 2);
         });
 
+        test('total property on the element shows all buttons', () => {
+          const element = fixture('TotalTestFixture');
+          assert.equal(element.total, 100);
+          const elementShadowRoot = element.shadowRoot;
+
+          // Should show all numbers
+          const buttonElementList = elementShadowRoot.querySelectorAll('paper-button');
+          const buttonElementDisabledList = elementShadowRoot.querySelectorAll('paper-button[disabled]');
+          const buttonElementHiddenList = elementShadowRoot.querySelectorAll('paper-button[hidden]');
+          const buttonElementActiveList = elementShadowRoot.querySelectorAll('paper-button[class=active]');
+          
+          assert.equal(buttonElementList.length, 7);
+          assert.equal(buttonElementDisabledList.length, 2);  // First and prev buttons are disabled
+          assert.equal(buttonElementHiddenList.length, 0);
+          assert.equal(buttonElementActiveList.length, 1);
+          assert.equal(buttonElementActiveList[0].innerText, 1)
+        });
+
+        test('paginating element with total property properly disables first, prev, next, and last buttons', () => {
+          const element = fixture('TotalTestFixture');
+          assert.equal(element.page, 1);
+          const elementShadowRoot = element.shadowRoot;
+
+          // First and prev should be disabled
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 2);
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[0].icon, 'icons:first-page');
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[1].icon, 'icons:chevron-left');
+
+          // In between pages should have no buttons disabled
+          element.nextPage();
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 0);
+
+          // Next and last should be disabled
+          element.lastPage();
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 2);
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[0].icon, 'icons:chevron-right');
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[1].icon, 'icons:last-page');
+
+          // In between pages should have no buttons disabled
+          element.prevPage();
+          assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 0);
+
+        });
+
+        test('small total property on the element shows limited buttons', () => {
+          const element = fixture('SmallTestFixture');
+          assert.equal(element.page, 2);
+          const elementShadowRoot = element.shadowRoot;
+
+          // Should show first two numbers, third number hidden
+          const buttonElementHiddenList = elementShadowRoot.querySelectorAll('paper-button[hidden]');
+          const buttonElementActiveList = elementShadowRoot.querySelectorAll('paper-button[class=active]');
+
+          assert.equal(buttonElementHiddenList.length, 1);
+          assert.equal(buttonElementActiveList[0].innerText, 2)
+        });
+
+        test('out of range `page` property on the element clamps `page`', () => {
+          const element = fixture('OutOfRangeTestFixture');
+          assert.equal(element.page, 1);
+        });
+
+        test('invalid `page` property on the element defaults `page`', () => {
+          const element = fixture('InvalidTestFixture');
+          assert.equal(element.page, 1);
+        });
       });
     </script>
-
   </body>
 </html>

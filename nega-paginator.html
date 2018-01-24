@@ -7,6 +7,7 @@
     <style>
       :host {
         display: block;
+        user-select: none;
       }
 
       paper-button {
@@ -65,7 +66,7 @@
           },
           _prevPage: {
             type: Number,
-            computed: '_computePrevPage(page)'
+            computed: '_computePrevPage(page, _maxPage)'
           },
           _nextPage: {
             type: Number,
@@ -99,7 +100,7 @@
 
       connectedCallback() {
         super.connectedCallback()
-        this.page = this.__clamp(this.page, 1, this._maxPage)
+        this.page = this.__clamp(this.page, 1, this._maxPage) || 1
       }
 
       _computePageList(page, maxPage) {
@@ -107,8 +108,8 @@
         return this.__range(n - 1, Math.min(maxPage, n + 1))
       }
 
-      _computePrevPage(page) {
-        return this.__clamp(page - 1, 1, this._maxPage)
+      _computePrevPage(page, maxPage) {
+        return this.__clamp(page - 1, 1, maxPage)
       }
 
       _computeNextPage(page, maxPage) {
