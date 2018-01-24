@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 
 <dom-module id="nega-paginator">
   <template>
@@ -21,35 +22,16 @@
       }
     </style>
     
-    <paper-button raised on-click="firstPage"><iron-icon icon="icons:first-page"></iron-icon></paper-button>
-    <paper-button raised on-click="prevPage"><iron-icon icon="icons:chevron-left"></iron-icon></paper-button>
-    <template is="dom-repeat" items="{{pageList}}">
-      <paper-button raised on-click="_handleChangePage" class$="{{_classActive(item)}}">[[item]]</paper-button>
-    </template>
-    <paper-button raised on-click="nextPage"><iron-icon icon="icons:chevron-right"></iron-icon></paper-button>
-    <paper-button raised on-click="lastPage"><iron-icon icon="icons:last-page"></iron-icon></paper-button>
-    <!-- TODO Page size selection -->
+    <paper-button raised disabled="[[_computeDisabled(page, 1)]]" on-click="firstPage"><iron-icon icon="icons:first-page"></iron-icon></paper-button>
+    <paper-button raised disabled="[[_computeDisabled(page, _prevPage)]]" on-click="prevPage"><iron-icon icon="icons:chevron-left"></iron-icon></paper-button>
+    <paper-button raised hidden="[[_computeHidden(pageList.0)]]" on-click="_handleChangePage" class$="[[_computeClass(pageList.0)]]">[[pageList.0]]</paper-button>
+    <paper-button raised hidden="[[_computeHidden(pageList.1)]]"on-click="_handleChangePage" class$="[[_computeClass(pageList.1)]]">[[pageList.1]]</paper-button>
+    <paper-button raised hidden="[[_computeHidden(pageList.2)]]"on-click="_handleChangePage" class$="[[_computeClass(pageList.2)]]">[[pageList.2]]</paper-button>
+    <paper-button raised disabled="[[_computeDisabled(page, _nextPage)]]" on-click="nextPage"><iron-icon icon="icons:chevron-right"></iron-icon></paper-button>
+    <paper-button raised disabled="[[_computeDisabled(page, _maxPage)]]" on-click="lastPage"><iron-icon icon="icons:last-page"></iron-icon></paper-button>
   </template>
 
   <script>
-    /**
-     * Helper: Inclusive range array
-     */
-     function range(min, max) {
-      let results = []
-      for (let i = min; i <= max; i++) {
-        results.push(i)
-      }
-      return results
-    }
-
-    /**
-     * Helper: Clamp number between a min and max
-     */
-    function clamp(x, min, max) {
-      return Math.max(min, Math.min(max, x))
-    }
-
     /**
      * `nega-paginator`
      * A Polymer paginator
@@ -66,62 +48,96 @@
             type: Number,
             value: 1,
             notify: true,
-            reflectToAttribute: true,
-            observer: '_pageChanged'
+            reflectToAttribute: true
           },
           pageSize: {
             type: Number,
-            value: 10,
-            notify: true,
-            reflectToAttribute: true,
-            observer: '_pageSizeChanged'
+            value: 10
           },
           total: {
             type: Number,
-            value: NaN,
-            observer: '_totalChanged'
+            value: NaN
           },
           pageList: {
             type: Array,
             value: [1, 2, 3],
-            computed: '_computePageList(page, pageSize, total)'
+            computed: '_computePageList(page, _maxPage)'
+          },
+          _prevPage: {
+            type: Number,
+            computed: '_computePrevPage(page)'
+          },
+          _nextPage: {
+            type: Number,
+            computed: '_computeNextPage(page, _maxPage)'
+          },
+          _maxPage: {
+            type: Number,
+            computed: '_computeMaxPage(page, pageSize, total)'
           }
         }
       }
 
-      _pageChanged(page) {
-        console.log('page', page)
-      }
-
-      _pageSizeChanged(pageSize) {
-        console.log('pageSize', pageSize)
-      }
-
-      _totalChanged(total) {
-        console.log('total', total)
-      }
-
-      _classActive(page) {
-        if (this.page === page) {
-          return 'active'
+      /**
+      * Helper: Inclusive range array.
+      */
+      __range(min, max) {
+        let results = []
+        for (let i = min; i <= max; i++) {
+          results.push(i)
         }
+        return results
       }
 
-      _computePageList(page, pageSize, total) {
-        let max = Math.ceil(pageSize / total)
-        let n = clamp(page, 2, max - 1)
-        console.log('pageList changed')
-        return range(n - 1, n + 1)
+      /**
+      * Helper: Clamp number between a min and max. Also handle NaN.
+      */
+      __clamp(x, min, max) {
+        if (isNaN(x) || isNaN(min) || isNaN(max)) return x;
+        return Math.max(min, Math.min(max, x))
+      }
+
+      connectedCallback() {
+        super.connectedCallback()
+        this.page = this.__clamp(this.page, 1, this._maxPage)
+      }
+
+      _computePageList(page, maxPage) {
+        let n = this.__clamp(page, 2, maxPage - 1)
+        return this.__range(n - 1, Math.min(maxPage, n + 1))
+      }
+
+      _computePrevPage(page) {
+        return this.__clamp(page - 1, 1, this._maxPage)
+      }
+
+      _computeNextPage(page, maxPage) {
+        return this.__clamp(page + 1, 1, maxPage)
+      }
+
+      _computeMaxPage(page, pageSize, total) {
+        return Math.ceil(total / pageSize)
+      }
+
+      _computeClass(page) {
+        return this.page === page && 'active'
+      }
+
+      _computeDisabled(page, checkPage) {
+        return isNaN(checkPage) || page === checkPage
+      }
+
+      _computeHidden(page) {
+        return page === undefined
       }
 
       _handleChangePage(e) {
-        this.changePage(e.model.item)
+        this.changePage(parseInt(e.path[0].innerText))
       }
 
       changePage(page) {
-        this.set('page', page)
-        // force re-render
-        this.set('pageList', this.pageList)
+        let newPage = this.__clamp(page, 1, this._maxPage)
+        this.page !== newPage && this.set('page', newPage)
       }
 
       firstPage() {
@@ -137,10 +153,9 @@
       }
 
       lastPage() {
-        this.changePage(Math.ceil(pageSize / total))
+        this.changePage(Math.ceil(this.total / this.pageSize))
       }
     }
-
     window.customElements.define(NegaPaginator.is, NegaPaginator);
   </script>
 </dom-module>

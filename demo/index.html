@@ -22,8 +22,11 @@
       <h3>Basic nega-paginator demo</h3>
       <demo-snippet>
         <template>
-          Current page is {{page}}.
-          <nega-paginator page="{{page}}" pageSize="{{pageSize}}" total="100"></nega-paginator>
+          <nega-paginator page="1" page-size="20" total="100"></nega-paginator>
+          <nega-paginator page="5" page-size="20" total="100"></nega-paginator>
+          <nega-paginator page="3" page-size="20" total="100"></nega-paginator>
+          <nega-paginator page="2" page-size="20" total="10"></nega-paginator>
+          <nega-paginator></nega-paginator>
         </template>
       </demo-snippet>
     </div>
