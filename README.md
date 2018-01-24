@@ -1,5 +1,7 @@
 # \<nega-paginator\>
 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/kennethklee/nega-paginator)
+
 `nega-paginator` is a paginator for Polymer.
 
 Example:
