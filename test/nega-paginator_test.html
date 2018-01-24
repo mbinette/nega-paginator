@@ -84,6 +84,10 @@
           element.firstPage();
           assert.equal(element.page, 1);
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 2);
+
+          // Cannot go past first page
+          element.prevPage();
+          assert.equal(element.page, 1);
         });
 
         test('total property on the element shows all buttons', () => {
@@ -114,20 +118,28 @@
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[0].icon, 'icons:first-page');
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[1].icon, 'icons:chevron-left');
 
+          // Cannot go past first page
+          element.prevPage();
+          assert.equal(element.page, 1);
+
           // In between pages should have no buttons disabled
           element.nextPage();
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 0);
 
           // Next and last should be disabled
           element.lastPage();
+          assert.equal(element.page, 10);
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 2);
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[0].icon, 'icons:chevron-right');
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled] iron-icon')[1].icon, 'icons:last-page');
 
+          // Cannot go past last page
+          element.nextPage();
+          assert.equal(element.page, 10);
+
           // In between pages should have no buttons disabled
           element.prevPage();
           assert.equal(elementShadowRoot.querySelectorAll('paper-button[disabled]').length, 0);
-
         });
 
         test('small total property on the element shows limited buttons', () => {

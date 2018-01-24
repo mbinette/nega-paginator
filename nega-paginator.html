@@ -94,7 +94,7 @@
       * Helper: Clamp number between a min and max. Also handle NaN.
       */
       __clamp(x, min, max) {
-        if (isNaN(x) || isNaN(min) || isNaN(max)) return x;
+        if (isNaN(min) || isNaN(max)) return x;
         return Math.max(min, Math.min(max, x))
       }
 
@@ -150,7 +150,7 @@
       }
 
       prevPage() {
-        this.changePage(this.page - 1)
+        this.changePage(Math.max(1, this.page - 1))
       }
 
       lastPage() {
