@@ -2,6 +2,7 @@
   "name": "nega-paginator",
   "description": "A Polymer paginator",
   "main": "nega-paginator.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-button": "polymerelements/paper-button#^2.0.0",
