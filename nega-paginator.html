@@ -56,6 +56,8 @@ Custom property | Description | Default
     <paper-button raised hidden="[[_computeHidden(_pageList.0)]]" on-click="_handleChangePage" class$="[[_computeClass(_pageList.0)]]">[[_pageList.0]]</paper-button>
     <paper-button raised hidden="[[_computeHidden(_pageList.1)]]"on-click="_handleChangePage" class$="[[_computeClass(_pageList.1)]]">[[_pageList.1]]</paper-button>
     <paper-button raised hidden="[[_computeHidden(_pageList.2)]]"on-click="_handleChangePage" class$="[[_computeClass(_pageList.2)]]">[[_pageList.2]]</paper-button>
+    <paper-button raised hidden="[[_computeHidden(_pageList.3)]]"on-click="_handleChangePage" class$="[[_computeClass(_pageList.3)]]">[[_pageList.3]]</paper-button>
+    <paper-button raised hidden="[[_computeHidden(_pageList.4)]]"on-click="_handleChangePage" class$="[[_computeClass(_pageList.4)]]">[[_pageList.4]]</paper-button>
     <paper-button raised disabled="[[_computeDisabled(page, _nextPage)]]" on-click="nextPage"><iron-icon icon="icons:chevron-right"></iron-icon></paper-button>
     <paper-button raised disabled="[[_computeDisabled(page, _maxPage)]]" on-click="lastPage"><iron-icon icon="icons:last-page"></iron-icon></paper-button>
   </template>
@@ -145,8 +147,8 @@ Custom property | Description | Default
       }
 
       _computePageList(page, maxPage) {
-        let n = this.__clamp(page, 2, maxPage - 1)
-        return this.__range(n - 1, Math.min(maxPage, n + 1))
+        let n = this.__clamp(page, 3, maxPage - 2)
+        return this.__range(Math.max(1, n - 2), Math.min(maxPage, n + 2))
       }
 
       _computePrevPage(page, maxPage) {

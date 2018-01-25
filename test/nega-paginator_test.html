@@ -54,9 +54,9 @@
           const buttonElementDisabledList = elementShadowRoot.querySelectorAll('paper-button[disabled]');
           const buttonElementHiddenList = elementShadowRoot.querySelectorAll('paper-button[hidden]');
           
-          assert.equal(buttonElementList.length, 7);
+          assert.equal(buttonElementList.length, 9);
           assert.equal(buttonElementDisabledList.length, 2);
-          assert.equal(buttonElementHiddenList.length, 3);
+          assert.equal(buttonElementHiddenList.length, 5);
         });
 
         test('paginating default element properly disables first and last buttons', () => {
@@ -101,7 +101,7 @@
           const buttonElementHiddenList = elementShadowRoot.querySelectorAll('paper-button[hidden]');
           const buttonElementActiveList = elementShadowRoot.querySelectorAll('paper-button[class=active]');
           
-          assert.equal(buttonElementList.length, 7);
+          assert.equal(buttonElementList.length, 9);
           assert.equal(buttonElementDisabledList.length, 2);  // First and prev buttons are disabled
           assert.equal(buttonElementHiddenList.length, 0);
           assert.equal(buttonElementActiveList.length, 1);
@@ -147,11 +147,11 @@
           assert.equal(element.page, 2);
           const elementShadowRoot = element.shadowRoot;
 
-          // Should show first two numbers, third number hidden
+          // Should show first two numbers, rest of numbers hidden
           const buttonElementHiddenList = elementShadowRoot.querySelectorAll('paper-button[hidden]');
           const buttonElementActiveList = elementShadowRoot.querySelectorAll('paper-button[class=active]');
 
-          assert.equal(buttonElementHiddenList.length, 1);
+          assert.equal(buttonElementHiddenList.length, 3);
           assert.equal(buttonElementActiveList[0].innerText, 2)
         });
 
