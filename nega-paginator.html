@@ -176,7 +176,7 @@ Custom property | Description | Default
       }
 
       _handleChangePage(e) {
-        this.changePage(parseInt(e.path[0].innerText))
+        this.changePage(parseInt(e.currentTarget.innerText))
       }
 
       changePage(page) {
