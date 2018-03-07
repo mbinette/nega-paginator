@@ -101,6 +101,14 @@ Custom property | Description | Default
             value: NaN
           },
 
+          /**
+           * Small will limit the display to a single page number.
+           */
+          small: {
+            type: Boolean,
+            value: false
+          },
+
           _pageList: {
             type: Array,
             value: [1, 2, 3],
@@ -147,6 +155,11 @@ Custom property | Description | Default
       }
 
       _computePageList(page, maxPage) {
+        if (this.small) {
+          let n = this.__clamp(page, 1, maxPage)
+          return this.__range(Math.max(1, n), Math.min(maxPage, n))
+        }
+
         let n = this.__clamp(page, 3, maxPage - 2)
         return this.__range(Math.max(1, n - 2), Math.min(maxPage, n + 2))
       }
@@ -164,7 +177,7 @@ Custom property | Description | Default
       }
 
       _computeClass(page) {
-        return this.page === page && 'active'
+        return (this.page === page ? 'active' : 'inactive');
       }
 
       _computeDisabled(page, checkPage) {
