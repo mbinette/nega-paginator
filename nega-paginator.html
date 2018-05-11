@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
 
 <!--
 A simple paginator for Polymer. There are two types of pagination: basic, and page list. The page list has 3 page buttons shown, while basic has no page list. Just the basic first, next, and prev buttons.
@@ -50,6 +51,8 @@ Custom property | Description | Default
         @apply --nega-paginator-active-button;
       }
     </style>
+    
+    <iron-media-query query="(max-width: 600px)" query-matches="{{small}}"></iron-media-query>
     
     <paper-button raised disabled="[[_computeDisabled(page, 1)]]" on-click="firstPage"><iron-icon icon="icons:first-page"></iron-icon></paper-button>
     <paper-button raised disabled="[[_computeDisabled(page, _prevPage)]]" on-click="prevPage"><iron-icon icon="icons:chevron-left"></iron-icon></paper-button>
