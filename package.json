@@ -1,18 +1,27 @@
 {
-  "name": "nega-paginator",
-  "version": "2.0.4",
   "description": "A Polymer paginator.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "homepage": "https://github.com/kennethklee/nega-paginator#readme",
+  "name": "@mbinette/nega-paginator",
+  "version": "3.0.0",
+  "main": "nega-paginator.js",
+  "contributors": [
+    "Kenneth Lee <kennethkl@gmail.com>",
+    "Michael Binette <mbinette@oncasoft.com>"
+  ],
+  "resolutions": {
+    "inherits": "2.0.3",
+    "samsam": "1.1.3",
+    "supports-color": "3.1.2",
+    "type-detect": "1.0.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kennethklee/nega-paginator.git"
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/paper-button": "^3.0.0",
+    "@polymer/iron-icons": "^3.0.0",
+    "@polymer/iron-media-query": "^3.0.0"
   },
-  "author": "Kenneth Lee <kennethkl@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/kennethklee/nega-paginator/issues"
-  },
-  "homepage": "https://github.com/kennethklee/nega-paginator#readme"
+  "devDependencies": {
+    "@polymer/iron-demo-helpers": "^3.0.0"
+  }
 }
