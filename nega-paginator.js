@@ -50,17 +50,21 @@ class NegaPaginator extends PolymerElement {
       }
 
       paper-button {
-        height: 45px;
-        min-width: 50px;
-        vertical-align: top;
-        border: #ccc 1px solid;
-        background: white;
+        height: var(--nega-paginator-button_-_height, 45px);
+        min-width: var(--nega-paginator-button_-_min-width, 50px);
+        vertical-align: var(--nega-paginator-button_-_vertical-align, top);
+        border: var(--nega-paginator-button_-_border, #ccc 1px solid);
+        padding: var(--nega-paginator-button_-_padding);
+        margin: var(--nega-paginator-button_-_margin);
+        background: var(--nega-paginator-button_-_background, white);
+        box-shadow: var(--nega-paginator-button_-_box-shadow, inherit);
 
         @apply --nega-paginator-button;
       }
 
       .active {
-        font-weight: bold;
+        font-weight: var(--nega-paginator-active-button_-_font-weight, bold);
+        font-size: var(--nega-paginator-active-button_-_font-size);
 
         @apply --nega-paginator-active-button;
       }
